@@ -59,4 +59,19 @@ Write-Host "  启动器    : $installDir\dsh-launcher.exe"
 Write-Host "  停止管家  : $dshTools\dsh-stop-server.js"
 Write-Host "  桌面快捷  : DeepSeek Harness.lnk / 停止DSH.lnk"
 Write-Host ''
-Write-Host '浏览器停止按钮插件在 extension/ 目录，Chrome/Edge 打开扩展管理页 -> 开发者模式 -> 加载已解压的扩展程序 选择它。'
+
+# 6) 浏览器停止按钮插件的辅助安装（插件只能在浏览器里手动加载，脚本帮到你打开页面+复制路径）
+$extPath = Join-Path $root 'extension'
+if (Test-Path $extPath) {
+  try { Set-Clipboard $extPath; Write-Host "扩展路径已复制到剪贴板: $extPath" } catch { }
+  $hasEdge = Get-Process msedge -ErrorAction SilentlyContinue | Select-Object -First 1
+  $hasChrome = Get-Process chrome -ErrorAction SilentlyContinue | Select-Object -First 1
+  if ($hasEdge) { Start-Process 'msedge://extensions' | Out-Null; Write-Host '已打开 Edge 扩展管理页（msedge://extensions）' }
+  elseif ($hasChrome) { Start-Process 'chrome://extensions' | Out-Null; Write-Host '已打开 Chrome 扩展管理页（chrome://extensions）' }
+  Write-Host ''
+  Write-Host '浏览器手动操作（约 30 秒，浏览器安全限制无法脚本代劳）：'
+  Write-Host '  1) 打开页面右上角「开发者模式」开关'
+  Write-Host '  2) 点「加载已解压的扩展程序」'
+  Write-Host "  3) 选文件夹: $extPath  （已在剪贴板，直接 Ctrl+V）"
+  Write-Host '装好后打开 DSH 页面(127.0.0.1:3080)，左下角会出现红色「⏻ 停止 DSH」按钮。'
+}
