@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "DSH Stop Button",
+  "version": "1.0.0",
+  "description": "在 DeepSeek Harness 页面添加一键停止服务按钮",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "host_permissions": [
+    "http://127.0.0.1:3099/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://127.0.0.1:3080/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
